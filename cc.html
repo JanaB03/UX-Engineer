@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CommuniCare — Case Study · Jana Bridi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg:           #F0E8D2;
+    --bg-raised:    #DDD0B2;
+    --bg-sunken:    #CFC09A;
+    --ink:          #1C1410;
+    --ink-muted:    #584638;
+    --ink-faint:    #96806C;
+    --accent:       #C25518;
+    --rule:         #C0AD92;
+    --annotation:   #3A6632;
+    --cc-blue:      #2B4C7E;
+    --cc-orange:    #C25518;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 60px;
+  }
+  nav a.back {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  nav a.back:hover { color: var(--accent); }
+  nav .nav-badge {
+    font-family: 'Caveat', cursive;
+    font-size: 1.05rem;
+    color: var(--annotation);
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+  .container--wide {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+
+  section { padding: 6rem 0; }
+  section + section { padding-top: 0; }
+
+  /* HERO */
+  .hero {
+    padding-top: 120px;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero__eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero__eyebrow::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .hero__title {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero__subtitle {
+    font-size: 1.15rem;
+    color: var(--ink-muted);
+    max-width: 56ch;
+    margin-bottom: 3rem;
+    line-height: 1.75;
+  }
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .meta-item__label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .meta-item__value {
+    font-size: 0.92rem;
+    color: var(--ink-muted);
+  }
+
+  .hero__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-pill {
+    background: var(--cc-blue);
+    color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .stat-pill__num {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    display: block;
+  }
+  .stat-pill__desc {
+    font-size: 0.78rem;
+    opacity: 0.85;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  /* SECTION HEADERS */
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .section-marker__num { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-faint); }
+  .section-marker__line { flex: 1; height: 1px; background: var(--rule); }
+  .section-marker__tag { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+
+  h2.section-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+  p.section-body {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    max-width: 64ch;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 2rem;
+    margin: 2.5rem 0;
+    background: var(--bg-raised);
+    border-radius: 0 4px 4px 0;
+  }
+  .pull-quote p {
+    font-family: 'Lora', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    margin-top: 0.75rem;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  /* IMAGES */
+  .img-full {
+    width: 100%;
+    border-radius: 4px;
+    display: block;
+    margin: 2rem 0;
+    border: 1px solid var(--rule);
+  }
+  .img-caption {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--ink-faint);
+    margin-top: -1.25rem;
+    margin-bottom: 2rem;
+    padding-left: 0.25rem;
+  }
+
+  /* VIDEO embed */
+  .video-wrap {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    box-shadow: 0 4px 24px rgba(28,20,16,0.1);
+    margin: 2rem 0;
+  }
+  .video-wrap video,
+  .video-wrap iframe {
+    width: 100%;
+    display: block;
+    border: none;
+  }
+  .video-wrap--ratio {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+  }
+  .video-wrap--ratio iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+  .grid-item img { width: 100%; border-radius: 4px; border: 1px solid var(--rule); display: block; }
+  .grid-item__label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink-faint); text-transform: uppercase; margin-top: 0.5rem; }
+
+  /* INSIGHT CARDS */
+  .insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2.5rem 0; }
+  .insight-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.75rem;
+  }
+  .insight-card__num {
+    font-family: 'Lora', serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .insight-card h4 {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .insight-card p {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.65;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 2.5rem 0;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .timeline-step { padding: 1.5rem; border-right: 1px solid var(--rule); }
+  .timeline-step:last-child { border-right: none; }
+  .timeline-step__num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .timeline-step__label { font-family: 'Lora', serif; font-size: 1rem; font-weight: 500; margin-bottom: 0.4rem; }
+  .timeline-step__desc { font-size: 0.82rem; color: var(--ink-muted); line-height: 1.55; }
+
+  /* FEATURE ROWS (like hifi-row in 48in48) */
+  .feature-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    margin: 3.5rem 0;
+    padding: 2.5rem;
+    background: var(--bg-raised);
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+  }
+  .feature-row.reverse { grid-template-columns: 1fr 1.2fr; }
+  .feature-row.reverse .feature-media { order: 2; }
+  .feature-row.reverse .feature-info { order: 1; }
+  .feature-media video {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    border: 1px solid var(--rule);
+    box-shadow: 0 4px 24px rgba(28,20,16,0.12);
+  }
+  .feature-info { display: flex; flex-direction: column; gap: 0.75rem; }
+  .feature-info__tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .feature-info h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .feature-info__problem {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+  .feature-info p {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+  }
+  .feature-info ul {
+    list-style: none;
+    margin-top: 0.25rem;
+  }
+  .feature-info ul li {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .feature-info ul li::before { content: '→'; color: var(--accent); font-size: 0.8rem; }
+  .feature-info ul li:last-child { border-bottom: none; }
+
+  /* PRINCIPLES */
+  .principles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin: 2.5rem 0; }
+  .principle-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.75rem;
+  }
+  .principle-card__icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .principle-card h4 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
+  .principle-card p { font-size: 0.9rem; color: var(--ink-muted); line-height: 1.65; }
+
+  /* DS BLOCK */
+  .ds-block {
+    background: var(--bg-raised);
+    border-radius: 6px;
+    padding: 2rem;
+    border: 1px solid var(--rule);
+  }
+  .ds-block h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.25rem;
+  }
+  .ds-block img { width: 100%; border-radius: 3px; display: block; }
+
+  /* OUTCOME */
+  .outcome-block {
+    background: var(--cc-blue);
+    border-radius: 8px;
+    padding: 4rem;
+    text-align: center;
+    color: #fff;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .outcome-block::before {
+    content: 'ABC';
+    position: absolute;
+    font-family: 'Lora', serif;
+    font-size: 14rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.05);
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .outcome-block h2 { font-family: 'Lora', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 600; margin-bottom: 1rem; position: relative; }
+  .outcome-block p { font-size: 1.05rem; opacity: 0.85; max-width: 52ch; margin: 0 auto 2rem; line-height: 1.7; position: relative; }
+  .outcome-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .outcome-link:hover { background: rgba(255,255,255,0.25); }
+
+  /* NEXT STEPS */
+  .next-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2.5rem 0; }
+  .next-card { background: var(--bg-raised); border: 1px solid var(--rule); border-radius: 6px; padding: 1.75rem; }
+  .next-card__num { font-family: 'Lora', serif; font-size: 2rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .next-card h4 { font-family: 'Lora', serif; font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; }
+  .next-card p { font-size: 0.88rem; color: var(--ink-muted); line-height: 1.65; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  footer .foot-left { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--ink-faint); letter-spacing: 0.05em; }
+  footer a.foot-link { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+  footer a.foot-link:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .insight-grid { grid-template-columns: 1fr 1fr; }
+    .feature-row, .feature-row.reverse { grid-template-columns: 1fr; }
+    .feature-row.reverse .feature-media { order: 0; }
+    .feature-row.reverse .feature-info { order: 0; }
+    .principles-grid { grid-template-columns: 1fr 1fr; }
+    .next-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .hero__stats { flex-direction: column; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr 1fr; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .next-grid { grid-template-columns: 1fr; }
+    .outcome-block { padding: 2.5rem 1.5rem; }
+  }
+  @media (max-width: 480px) {
+    .timeline { grid-template-columns: 1fr; }
+    .timeline-step { border-right: none; border-bottom: 1px solid var(--rule); }
+    .timeline-step:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="back">← Back to portfolio</a>
+  <span class="nav-badge">CommuniCare · 2025</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <p class="hero__eyebrow">Case Study — Civic Tech · AI · End-to-End</p>
+    <h1 class="hero__title">CommuniCare</h1>
+    <p class="hero__subtitle">When San Diego's encampment policies disconnected 9,000+ people from the services keeping them alive, we designed a device-agnostic platform to maintain that human connection — no phone required.</p>
+
+    <div class="hero__stats">
+      <div class="stat-pill">
+        <span class="stat-pill__num">9,300+</span>
+        <span class="stat-pill__desc">People Displaced</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill__num">50%</span>
+        <span class="stat-pill__desc">Lost Phone Access</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill__num">ABC10</span>
+        <span class="stat-pill__desc">News Coverage</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill__num">Jan–May</span>
+        <span class="stat-pill__desc">2025 Timeline</span>
+      </div>
+    </div>
+
+    <div class="hero__meta">
+      <div class="meta-item">
+        <span class="meta-item__label">Role</span>
+        <span class="meta-item__value">Product Design + Frontend Dev</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item__label">Duration</span>
+        <span class="meta-item__value">Jan – May 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item__label">Tools</span>
+        <span class="meta-item__value">Figma · TypeScript · React</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item__label">Partner</span>
+        <span class="meta-item__value">Father Joe's Villages, San Diego</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item__label">Type</span>
+        <span class="meta-item__value">Civic Tech · End-to-End</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 THE CRISIS -->
+<section>
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">01</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">The Crisis</span>
+    </div>
+
+    <h2 class="section-title">When policy creates<br>invisible harm.</h2>
+    <p class="section-body">In 2023, the City of San Diego established new regulations prohibiting encampments on public property. The goal was public health. The unintended consequence was something no one planned for: outreach workers began losing contact with their most vulnerable clients — the people they'd been supporting for months or years.</p>
+    <p class="section-body">People who relied on these connections for medical care, shelter placement, and basic survival were suddenly unreachable. And the crisis, as one worker told us, always happened at the worst possible time.</p>
+
+    <div class="pull-quote">
+      <p>"Every crisis happens on Friday at 6pm."</p>
+      <cite>— Outreach Worker, Father Joe's Villages</cite>
+    </div>
+
+    <div class="video-wrap video-wrap--ratio" style="margin-top: 2.5rem;">
+      <iframe
+        src="https://www.youtube.com/embed/SYHHKmc5JPw?modestbranding=1&rel=0&playsinline=1"
+        title="ABC7 News — San Diego encampment sweeps near Petco Park"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <p class="img-caption">ABC7 News coverage of the encampment sweeps near Petco Park</p>
+  </div>
+</section>
+
+<!-- 02 THE PROBLEM -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">02</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">The Problem</span>
+    </div>
+
+    <h2 class="section-title">A perfect storm of barriers.</h2>
+    <p class="section-body">Through our research, we discovered it wasn't just the sweeps. There was a compounding set of communication barriers that made an already vulnerable population even more isolated.</p>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-card__num">#1</div>
+        <h4>Phone Loss</h4>
+        <p>Individuals lose an average of 12 phones per year to theft or financial constraints — making consistent contact nearly impossible for outreach staff.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-card__num">#2</div>
+        <h4>Constant Displacement</h4>
+        <p>Encampment sweeps force frequent moves, severing the support networks and making it difficult to reliably reach mobile health clinics or scheduled services.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-card__num">#3</div>
+        <h4>Resource Blindness</h4>
+        <p>Many clients are unaware of what's available to them. The current system distributes information poorly — resources go unused because people simply don't know they exist.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 RESEARCH -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">03</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">Research</span>
+    </div>
+
+    <h2 class="section-title">We went to see for ourselves.</h2>
+    <p class="section-body">To truly understand the problem, we needed to immerse ourselves in the world of those experiencing homelessness and the staff trying to help them. We didn't design from afar.</p>
+
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-step__num">Step 1</div>
+        <div class="timeline-step__label">Site Tour</div>
+        <div class="timeline-step__desc">Toured Father Joe's Villages — San Diego's largest homeless shelter provider — to understand the ecosystem.</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-step__num">Step 2</div>
+        <div class="timeline-step__label">Staff Interviews</div>
+        <div class="timeline-step__desc">15+ interviews with outreach workers, nurses, and case managers across multiple service points.</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-step__num">Step 3</div>
+        <div class="timeline-step__label">Client Sessions</div>
+        <div class="timeline-step__desc">Group interviews with currently unsheltered and recently sheltered individuals about their daily communication realities.</div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-step__num">Step 4</div>
+        <div class="timeline-step__label">Synthesis</div>
+        <div class="timeline-step__desc">Synthesized findings into actionable design opportunities and a prioritized feature list.</div>
+      </div>
+    </div>
+
+    <div class="video-wrap" style="margin-top: 2rem;">
+      <video controls>
+        <source src="images/communicare/onsite.MP4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="img-caption">Video from our on-site tour of Father Joe's Villages</p>
+  </div>
+</section>
+
+<!-- 04 CONCEPTS -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">04</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">From Insights to Concepts</span>
+    </div>
+
+    <h2 class="section-title">Research into design decisions.</h2>
+    <p class="section-body">Armed with field research, we mapped what the tool needed to become. Josh — our guide at Father Joe's — reminded us that "accessibility is the real emergency." Every design decision had to preserve a reliable line of communication between clients and case managers, even when the client had no personal device.</p>
+
+    <div class="grid-2" style="margin-top:2.5rem;">
+      <div class="ds-block">
+        <h4>Competitive Analysis</h4>
+        <img src="images/communicare/Comparison.png" alt="Competitive analysis — scheduling apps, social-care portals, SMS alert platforms" />
+      </div>
+      <div class="ds-block">
+        <h4>Feasibility Map</h4>
+        <img src="images/communicare/feasibility map.png" alt="Impact vs build-time feasibility matrix" />
+      </div>
+    </div>
+    <p class="img-caption">No single product solved both sides of our problem — loss of device AND after-hours communication. The feasibility map drove our MVP feature shortlist.</p>
+
+    <div class="ds-block" style="margin-top:1.5rem;">
+      <h4>Early Wireframes</h4>
+      <img src="images/communicare/Wireframes.png" alt="Low-fidelity wireframes of CommuniCare" />
+    </div>
+    <p class="img-caption">First-pass layouts sketched in one afternoon sprint — tested with a Father Joe's staff member the same day</p>
+
+    <div class="pull-quote">
+      <p>"This solves my 6 p.m. Friday panic."</p>
+      <cite>— Josh, Father Joe's Villages Staff</cite>
+    </div>
+  </div>
+</section>
+
+<!-- 05 HI-FI + FIGMA -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">05</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">High-Fidelity Prototypes</span>
+    </div>
+
+    <h2 class="section-title">Every screen validated<br>before we built it.</h2>
+    <p class="section-body">With wireframes approved, we developed full high-fidelity designs in Figma — desktop and mobile — ensuring every interaction was optimized for our users' unique constraints: borrowed devices, library computers, and stressful moments.</p>
+
+    <div style="margin:2.5rem 0;">
+      <p style="font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:1rem;">Desktop Interface</p>
+      <div class="video-wrap video-wrap--ratio">
+        <iframe
+          src="https://embed.figma.com/proto/29I5p5wEMeKIrL84V7C3wK/Untitled?node-id=29-1057&p=f&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=29%3A1057&show-proto-sidebar=1&embed-host=share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <div style="margin:2.5rem auto; max-width:400px;">
+      <p style="font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:1rem;">Mobile Interface</p>
+      <div class="video-wrap" style="padding-bottom:0;">
+        <div style="position:relative; padding-bottom:177%; height:0; overflow:hidden;">
+          <iframe
+            src="https://embed.figma.com/proto/29I5p5wEMeKIrL84V7C3wK/Untitled?node-id=44-275&p=f&scaling=scale-down&content-scaling=fixed&page-id=44%3A192&starting-point-node-id=44%3A275&embed-host=share"
+            allowfullscreen
+            style="position:absolute; inset:0; width:100%; height:100%; border:none;">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Lora',serif; font-size:1.3rem; font-weight:500; margin:2.5rem 0 1rem;">Accessibility Testing</h3>
+    <p class="section-body">For users with limited vision, motor difficulties, or assistive technologies — especially on shared public devices — accessibility wasn't a checkbox. It was the foundation.</p>
+
+    <div class="grid-3">
+      <div class="grid-item">
+        <img src="images/communicare/Acess1.jpg" alt="Color contrast testing results" />
+        <p class="grid-item__label">Color contrast testing</p>
+      </div>
+      <div class="grid-item">
+        <img src="images/communicare/Acess2.jpg" alt="Screen reader compatibility audit" />
+        <p class="grid-item__label">Screen reader audit</p>
+      </div>
+      <div class="grid-item">
+        <img src="images/communicare/Acess3.jpg" alt="Touch target size validation" />
+        <p class="grid-item__label">Touch target validation</p>
+      </div>
+    </div>
+
+    <div class="ds-block" style="margin-top:1rem;">
+      <h4>Before / After — Key Improvements</h4>
+      <img src="images/communicare/Acess4.jpg" alt="Before and after accessibility improvements" />
+    </div>
+    <p class="img-caption">Before: small touch targets, low contrast, complex navigation · After: 44px minimum targets, WCAG AAA contrast, simplified flow</p>
+  </div>
+</section>
+
+<!-- 06 FEATURES -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">06</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">The Product</span>
+    </div>
+
+    <h2 class="section-title">Introducing CommuniCare.</h2>
+    <p class="section-body">A device-agnostic communication platform designed to maintain human connection despite displacement, device loss, or after-hours emergencies.</p>
+
+    <!-- Feature 1 -->
+    <div class="feature-row">
+      <div class="feature-media">
+        <video autoplay muted loop playsinline>
+          <source src="images/communicare/logincommunicare1.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="feature-info">
+        <span class="feature-info__tag">No Phone Required</span>
+        <h3>Access from Anywhere</h3>
+        <p class="feature-info__problem">"I've had 12 phones stolen this year."</p>
+        <p>Secure access code login means no phone number needed. Clients can reach their account from any device — library computers, borrowed phones, shelter kiosks.</p>
+        <ul>
+          <li>Works on any internet-connected device</li>
+          <li>No personal information required to log in</li>
+          <li>Large, accessible interface for challenging environments</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="feature-row reverse">
+      <div class="feature-media">
+        <video autoplay muted loop playsinline>
+          <source src="images/communicare/chatcommunicare1.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="feature-info">
+        <span class="feature-info__tag">24/7 Support</span>
+        <h3>Always Someone to Help</h3>
+        <p class="feature-info__problem">"Every crisis happens on Friday at 6pm."</p>
+        <p>Private messaging with staff combined with a 24/7 AI chatbot ensures help is always available. Clients can delete sensitive messages immediately for privacy.</p>
+        <ul>
+          <li>AI support when staff are unavailable</li>
+          <li>Immediate message deletion for privacy</li>
+          <li>Resource guidance anytime, on any device</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="feature-row">
+      <div class="feature-media">
+        <video autoplay muted loop playsinline>
+          <source src="images/communicare/mapcommunicare1.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="feature-info">
+        <span class="feature-info__tag">Privacy First</span>
+        <h3>Stay Connected, Stay Safe</h3>
+        <p class="feature-info__problem">"We can't find clients after the sweeps."</p>
+        <p>Flexible location sharing lets clients share a current location, a future meetup spot, or a general area. Track the mobile health clinic to ensure access to medical care.</p>
+        <ul>
+          <li>Share current or future location</li>
+          <li>Manual entry option for full privacy control</li>
+          <li>Mobile clinic tracker for medical access</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Feature 4 -->
+    <div class="feature-row reverse">
+      <div class="feature-media">
+        <video autoplay muted loop playsinline>
+          <source src="images/communicare/resourcescommunicare.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="feature-info">
+        <span class="feature-info__tag">Smart Filtering</span>
+        <h3>Find Help That Fits</h3>
+        <p class="feature-info__problem">"I don't know what's even available to me."</p>
+        <p>Smart filtering surfaces only relevant resources based on location, availability, and eligibility. No more wasted trips to services that can't be accessed.</p>
+        <ul>
+          <li>Filter by eligibility criteria</li>
+          <li>Real-time availability status</li>
+          <li>Clear requirements listed upfront</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 DESIGN PRINCIPLES -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">07</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">Design Principles</span>
+    </div>
+
+    <h2 class="section-title">Every decision rooted<br>in real constraints.</h2>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-card__icon">🛡️</div>
+        <h4>Privacy First</h4>
+        <p>Every interaction gives users control over their personal information with immediate deletion options. For vulnerable populations, privacy isn't a feature — it's trust.</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">📱</div>
+        <h4>Device Agnostic</h4>
+        <p>Access from any computer or phone — no personal device required. Works at libraries, shelters, and community centers where people can borrow a screen for a few minutes.</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">🕐</div>
+        <h4>Crisis Ready</h4>
+        <p>24/7 support pathways mean help is available when traditional services are closed — because displacement doesn't wait for business hours.</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-card__icon">🤝</div>
+        <h4>Human Connection</h4>
+        <p>Technology facilitates but never replaces human relationships. Every feature is designed to strengthen real connections between clients and the people who care for them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 OUTCOME -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">08</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">Outcome</span>
+    </div>
+
+    <div class="outcome-block">
+      <h2>Covered by ABC10 News.</h2>
+      <p>CommuniCare was featured in ABC10 News coverage — a recognition that the problem we set out to solve was real, urgent, and that our design approach resonated beyond the classroom.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>"Working directly with people experiencing homelessness didn't just inform our design decisions — it fundamentally changed how I approach design as a whole."</p>
+    </div>
+  </div>
+</section>
+
+<!-- 09 REFLECTION + NEXT STEPS -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="section-marker">
+      <span class="section-marker__num">09</span>
+      <span class="section-marker__line"></span>
+      <span class="section-marker__tag">What's Next</span>
+    </div>
+
+    <h2 class="section-title">The journey continues.</h2>
+    <p class="section-body">CommuniCare achieved significant progress, but the real work — getting it into the hands of actual clients at Father Joe's Villages — is the next chapter.</p>
+
+    <div class="next-grid">
+      <div class="next-card">
+        <div class="next-card__num">01</div>
+        <h4>Staff Interface</h4>
+        <p>Design and develop the companion platform for outreach workers with bulk communication, client management, and location tracking tools.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card__num">02</div>
+        <h4>Backend Infrastructure</h4>
+        <p>Build robust real-time messaging, location services, and ensure enterprise-grade data security for vulnerable users on shared devices.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card__num">03</div>
+        <h4>Pilot at Father Joe's</h4>
+        <p>Partner with Father Joe's Villages for real-world implementation and iterate based on feedback from both clients and outreach staff in actual deployment conditions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <footer>
+    <span class="foot-left">Jana Bridi · Portfolio</span>
+    <div style="display:flex; gap:2rem;">
+      <a href="index.html" class="foot-link">← Back to work</a>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
